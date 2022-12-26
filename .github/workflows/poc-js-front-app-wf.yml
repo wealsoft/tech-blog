@@ -1,0 +1,60 @@
+name: poc-js-front-app-wf
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: node:19-buster-slim
+      volumes:
+        - ${{ github.workspace }}:${{ github.workspace }}
+      env:
+        NODE_ENV: development
+      options: --cpus 2
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/checkout@v3
+        with:
+          repository: 'wealsoft/pipeline-making'
+          token: ${{ secrets.PAT_PIPELINE_MAKING_REPO }}
+          path: './pipeline-making'
+          ref: "feature/ozaki_poc"
+
+      - name: Cache
+        uses: actions/cache@v3.0.11
+        with:
+          path: "**/node_modules"
+          key: node-modules-${{ github.sha }}
+          restore-keys: node-modules-
+
+      - name: App Src Build
+        shell: bash
+        run: |
+            sh ${{ github.workspace }}/.github/build.sh
+
+      - name: Unit Test
+        shell: bash
+        run: |
+            sh ${{ github.workspace }}/.github/unit_test.sh
+
+      - name: Integration Test
+        shell: bash
+        run: |
+            sh ${{ github.workspace }}/.github/integration_test.sh
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './sample_app'
+          severity: 'CRITICAL'
+          timeout: 5m
+          vuln-type: library
+          exit-code: 0
