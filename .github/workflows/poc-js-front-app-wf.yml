@@ -2,10 +2,15 @@ name: poc-js-front-app-wf
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [ "main" ]
-  # pull_request:
-  #   branches: [ "main" ]
+    push:
+      branches:
+        - develop
+    pull_request:
+      types:
+        - opened
+      branches:
+        - 'release/TECHBLOG-**'
+        - main
 
 jobs:
   build:
