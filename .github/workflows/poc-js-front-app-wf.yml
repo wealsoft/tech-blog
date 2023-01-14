@@ -8,6 +8,8 @@ on:
     pull_request:
       types:
         - opened
+        - reopened
+        - synchronize
       branches:
         - 'release/TECHBLOG-**'
         - main
