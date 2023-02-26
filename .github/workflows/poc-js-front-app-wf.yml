@@ -34,6 +34,13 @@ jobs:
       #     path: './pipeline-making'
       #     ref: "feature/ozaki_poc"
 
+      - name: SetEnv
+        shell: bash
+        env:
+          PR_BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          echo build_tag=${PR_BRANCH_NAME#*/} >> $GITHUB_ENV
+
       - name: Cache
         uses: actions/cache@v3.0.11
         with:
