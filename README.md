@@ -1,3 +1,33 @@
+## FireCMS
+
+### WSL上での環境構築
+
+PoCのため、一度ローカル上にfirebase-tools（CLI）を以下の手順でインストールした
+
+- [Ubuntu上でのyarnのインストール手順](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)
+- [Ubuntu上でのnodejsのインストール手順](https://github.com/nodesource/distributions)
+- [FirebaseCliのインストール手順](https://firebase.google.com/docs/cli?hl=ja#install-cli-mac-linux)
+- [FireCMSクイックスタート](https://firecms.co/docs/quickstart)
+```bash
+yarn create firecms-app
+cd <project name>
+yarn install
+```
+
+### Firebaseのセットアップ
+
+- [Firebaseプロジェクトのセットアップ](https://firebase.google.com/docs/hosting/quickstart?hl=ja#initialize)
+  - Firebaseのコンソール上でアプリが作成できていればOK
+- `project_name\src\firebase-config.ts`にfirebaseConfigの値をコンソール上からコピーして貼り付ける（詳細については[App側にFirebaseプロジェクトの登録方法](https://firecms.co/docs/firebase_setup#web-app)を参照のこと）
+
+### 手動デプロイ
+
+```bash
+# <project name>がカレントディレクトリとなっていることを確認
+# ５分弱かかります
+yarn deploy
+```
+
 ## SampleApp
 
 ### Next.jsのボイラーテンプレート作成
