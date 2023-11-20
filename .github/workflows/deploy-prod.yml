@@ -1,0 +1,64 @@
+name: Deploy to Live Channel
+
+on:
+  push:
+    branches:
+      - main
+      - feature/TECHBLOG-101
+    # Optionally configure to run only for specific files. For example:
+    # paths:
+    # - "website/**"
+
+jobs:
+  deploy_live_website:
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          token_format: "access_token"
+          workload_identity_provider: 'projects/370510691583/locations/global/workloadIdentityPools/github-actions/subject/SUBJECT_ATTRIBUTE_VALUE'
+          service_account: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      # Add any build steps here. For example:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Configuration of the yarn cache dir
+        shell: bash
+        run: |
+          yarn config set cache-folder ~/.npm
+      - name: Cache yarn dir
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      # - name: install the firebase-tools
+      #   shell: bash
+      #   run: |
+      #     yarn global add firebase-tools
+      # - name: install the dependency lib
+      #   shell: bash
+      #   run: |
+      #     # yarnがv2未満の場合
+      #     yarn install --frozen-lockfile
+      #     # yarnがv2以上の場合
+      #     yarn install --immutable --immutable-cache --check-cache
+      # - name: build
+      #   shell: bash
+      #   run: |
+      #     yarn build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.MACHINE_USER_PAT }}"
+          firebaseServiceAccount: "${{ steps.auth.outputs.access_token }}"
+          projectId: modern-bond-394602
+          channelId: live
+          entryPoint: "wealsoft_techblog"
