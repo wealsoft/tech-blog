@@ -1,0 +1,55 @@
+name: Deploy to Live Channel
+
+on:
+  push:
+    branches:
+      - main
+      - feature/TECHBLOG-101
+    # Optionally configure to run only for specific files. For example:
+    # paths:
+    # - "website/**"
+
+jobs:
+  firebase-build:
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Configuration of the yarn cache dir
+        shell: bash
+        run: |
+          yarn config set cache-folder ~/.npm
+      - name: Cache yarn dir
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: install the firebase-tools
+        shell: bash
+        working-directory: "./wealsoft_techblog"
+        run: |
+          yarn global add firebase-tools
+      - name: install the dependency lib
+        shell: bash
+        working-directory: "./wealsoft_techblog"
+        run: |
+          yarn install --frozen-lockfile
+      - name: build
+        shell: bash
+        working-directory: "./wealsoft_techblog"
+        run: |
+          yarn build
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: firecms-artifact-${{ github.sha }}
+          path: |
+            ./wealsoft_techblog/dist

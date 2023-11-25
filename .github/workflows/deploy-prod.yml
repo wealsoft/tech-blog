@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - feature/TECHBLOG-101
+      # - feature/TECHBLOG-101
     # Optionally configure to run only for specific files. For example:
     # paths:
     # - "website/**"
