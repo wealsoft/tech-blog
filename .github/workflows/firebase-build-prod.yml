@@ -1,4 +1,4 @@
-name: Deploy to Live Channel
+name: Build the firebase artifacts for Dev and Prod
 
 on:
   push:
