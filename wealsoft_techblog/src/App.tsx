@@ -9,7 +9,7 @@ import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 
 import { firebaseConfig } from "./firebase-config.ts";
-import { productsCollection } from "./collections/products.tsx";
+import { blogCollection } from "./collections/blog_collection.tsx";
 
 export default function App() {
 
@@ -41,10 +41,10 @@ export default function App() {
     });
 
     return <FirebaseCMSApp
-        name={"My Online Shop"}
+        name={"WealSoft Inc. TechBlog"}
         plugins={[dataEnhancementPlugin]}
         authentication={myAuthenticator}
-        collections={[productsCollection]}
+        collections={[blogCollection]}
         firebaseConfig={firebaseConfig}
     />;
 }

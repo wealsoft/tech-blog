@@ -28,6 +28,11 @@ yarn install
 yarn deploy
 ```
 
+### Blogのセットアップ
+
+- [公式の説明](https://firecms.co/docs/recipes/building_a_blog)
+- [構成サンプル](https://github.com/firecmsco/firecms/tree/main/example/src/docs/recipes/blog)
+
 ## SampleApp
 
 ### Next.jsのボイラーテンプレート作成
