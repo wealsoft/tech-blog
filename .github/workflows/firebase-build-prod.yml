@@ -62,13 +62,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          token_format: "access_token"
-          workload_identity_provider: 'projects/370510691583/locations/global/workloadIdentityPools/github-actions/subject/SUBJECT_ATTRIBUTE_VALUE'
-          service_account: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      # - id: 'auth'
+      #   name: 'Authenticate to Google Cloud'
+      #   uses: 'google-github-actions/auth@v1'
+      #   with:
+      #     token_format: "access_token"
+      #     workload_identity_provider: 'projects/370510691583/locations/global/workloadIdentityPools/github-actions/subject/SUBJECT_ATTRIBUTE_VALUE'
+      #     service_account: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
       # Add any build steps here. For example:
       - uses: actions/download-artifact@v3
         with:
