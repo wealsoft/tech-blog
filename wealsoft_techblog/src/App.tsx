@@ -41,7 +41,7 @@ export default function App() {
     });
 
     return <FirebaseCMSApp
-        name={"WealSoft Inc. TechBlog"}
+        name={"WealSoft Co., Ltd. TechBlog"}
         plugins={[dataEnhancementPlugin]}
         authentication={myAuthenticator}
         collections={[blogCollection]}
