@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - main
-      # - feature/TECHBLOG-101
+      - feature/TECHBLOG-101
     # Optionally configure to run only for specific files. For example:
     # paths:
     # - "website/**"
@@ -19,25 +19,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          token_format: "access_token"
-          workload_identity_provider: 'projects/370510691583/locations/global/workloadIdentityPools/github-actions/subject/SUBJECT_ATTRIBUTE_VALUE'
-          service_account: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      # - id: 'auth'
+      #   name: 'Authenticate to Google Cloud'
+      #   uses: 'google-github-actions/auth@v1'
+      #   with:
+      #     token_format: "access_token"
+      #     workload_identity_provider: 'projects/370510691583/locations/global/workloadIdentityPools/github-actions/subject/SUBJECT_ATTRIBUTE_VALUE'
+      #     service_account: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
       # Add any build steps here. For example:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 18
       - uses: actions/download-artifact@v3
         with:
           name: firecms-artifact-${{ github.sha }}
-          path: "./wealsoft_techblog"
+          path: "./wealsoft_techblog/dist"
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: "${{ secrets.MACHINE_USER_PAT }}"
-          firebaseServiceAccount: "${{ steps.auth.outputs.access_token }}"
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MODERN_BOND_394602 }}'
           projectId: modern-bond-394602
-          channelId: live
           entryPoint: "wealsoft_techblog"
+          channelId: live
