@@ -3,9 +3,8 @@ name: Deploy to Live Channel(Prod)
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
-      - feature/TECHBLOG-101
+    tags:
+      - "*"
     # Optionally configure to run only for specific files. For example:
     # paths:
     # - "website/**"
