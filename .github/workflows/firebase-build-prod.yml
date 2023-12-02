@@ -62,14 +62,14 @@ jobs:
         shell: bash
         # working-directory: "./wealsoft_techblog"
         run: |
-          tar -zcvf ./$GITHUB_HASH.tar.gz ./wealsoft_techblog/dist
-          ls -lr
-      # # MultiProcessアップロードを行うためCLIベースでアップロードを実行
-      # - name: Upload Artifact GCS
-      #   shell: bash
-      #   # working-directory: "./wealsoft_techblog"
-      #   run: |
-      #     gsutil -m cp -r ./wealsoft_techblog/dist gs://wealsoft-techblog-test1/ci_artifacts/
+          tar -zcvf dist-${{ github.sha }}.tar.gz ./wealsoft_techblog/dist
+          ls -la
+  #     # MultiProcessアップロードを行うためCLIベースでアップロードを実行
+  #     - name: Upload Artifact GCS
+  #       shell: bash
+  #       # working-directory: "./wealsoft_techblog"
+  #       run: |
+  #         gsutil -m cp -r ./dist-${{ github.sha }}.tar.gz gs://wealsoft-techblog-test1/ci_artifacts/
   # deploy_dev_env:
   #   needs: ["firebase-build"]
   #   permissions:
@@ -94,7 +94,13 @@ jobs:
   #       shell: bash
   #       # working-directory: "./wealsoft_techblog"
   #       run: |
-  #         gsutil -m cp -r gs://wealsoft-techblog-test1/ci_artifacts/ ./wealsoft_techblog/dist
+  #         gsutil -m cp -r gs://wealsoft-techblog-test1/ci_artifacts/dist-${{ github.sha }}.tar.gz ./
+  #     - name: Unzip Artifact from GCS
+  #       shell: bash
+  #       # working-directory: "./wealsoft_techblog"
+  #       run: |
+  #         tar -zxvf dist-${{ github.sha }}.tar.gz
+  #         ls -la
   #     - uses: FirebaseExtended/action-hosting-deploy@v0
   #       with:
   #         repoToken: '${{ secrets.GITHUB_TOKEN }}'
