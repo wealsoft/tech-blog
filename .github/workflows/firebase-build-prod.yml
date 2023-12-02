@@ -47,44 +47,58 @@ jobs:
         working-directory: "./wealsoft_techblog"
         run: |
           yarn build
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
         with:
-          name: firecms-artifact-${{ github.sha }}
-          path: |
-            ./wealsoft_techblog/dist
-  deploy_dev_env:
-    needs: ["firebase-build"]
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      # - id: 'auth'
-      #   name: 'Authenticate to Google Cloud'
-      #   uses: 'google-github-actions/auth@v1'
-      #   with:
-      #     token_format: "access_token"
-      #     workload_identity_provider: 'projects/370510691583/locations/global/workloadIdentityPools/github-actions/subject/SUBJECT_ATTRIBUTE_VALUE'
-      #     service_account: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-      # Add any build steps here. For example:
-      - uses: actions/download-artifact@v3
+          # token_format: "access_token"
+          workload_identity_provider: 'projects/370510691583/locations/global/workloadIdentityPools/github-actions/subject/SUBJECT_ATTRIBUTE_VALUE'
+          service_account: "github-action-582316782@modern-bond-394602.iam.gserviceaccount.com"
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
         with:
-          name: firecms-artifact-${{ github.sha }}
-          path: "./wealsoft_techblog/dist"
-      # - uses: FirebaseExtended/action-hosting-deploy@v0
-      #   with:
-      #     repoToken: "${{ secrets.MACHINE_USER_PAT }}"
-      #     firebaseServiceAccount: "${{ steps.auth.outputs.access_token }}"
-      #     projectId: modern-bond-394602
-      #     channelId: live
-      #     entryPoint: "wealsoft_techblog"
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MODERN_BOND_394602 }}'
-          projectId: modern-bond-394602
-          entryPoint: "wealsoft_techblog"
-          channelId: preview
+          version: '>= 363.0.0'
+      - name: Compless the Artifact
+        shell: bash
+        # working-directory: "./wealsoft_techblog"
+        run: |
+          tar -zcvf ./$GITHUB_HASH.tar.gz ./wealsoft_techblog/dist
+          ls -lr
+      # # MultiProcessアップロードを行うためCLIベースでアップロードを実行
+      # - name: Upload Artifact GCS
+      #   shell: bash
+      #   # working-directory: "./wealsoft_techblog"
+      #   run: |
+      #     gsutil -m cp -r ./wealsoft_techblog/dist gs://wealsoft-techblog-test1/ci_artifacts/
+  # deploy_dev_env:
+  #   needs: ["firebase-build"]
+  #   permissions:
+  #     contents: read
+  #     id-token: write
+  #     pull-requests: write
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - id: 'auth'
+  #       name: 'Authenticate to Google Cloud'
+  #       uses: 'google-github-actions/auth@v1'
+  #       with:
+  #         token_format: "access_token"
+  #         workload_identity_provider: 'projects/370510691583/locations/global/workloadIdentityPools/github-actions/subject/SUBJECT_ATTRIBUTE_VALUE'
+  #         service_account: "github-action-582316782@modern-bond-394602.iam.gserviceaccount.com"
+  #     - name: 'Set up Cloud SDK'
+  #       uses: 'google-github-actions/setup-gcloud@v1'
+  #       with:
+  #         version: '>= 363.0.0'
+  #     - name: Download Artifact from GCS
+  #       shell: bash
+  #       # working-directory: "./wealsoft_techblog"
+  #       run: |
+  #         gsutil -m cp -r gs://wealsoft-techblog-test1/ci_artifacts/ ./wealsoft_techblog/dist
+  #     - uses: FirebaseExtended/action-hosting-deploy@v0
+  #       with:
+  #         repoToken: '${{ secrets.GITHUB_TOKEN }}'
+  #         firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MODERN_BOND_394602 }}'
+  #         projectId: modern-bond-394602
+  #         entryPoint: "wealsoft_techblog"
+  #         channelId: preview
