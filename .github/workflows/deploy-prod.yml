@@ -40,3 +40,10 @@ jobs:
           projectId: modern-bond-394602
           entryPoint: "wealsoft_techblog"
           channelId: live
+  # TODO プロダクションにデプロイした成果物にバージョン番号を含めてGCSで管理できるようにする
+  #     # MultiProcessアップロードを行うためCLIベースでアップロードを実行
+  #     - name: Upload Artifact GCS
+  #       shell: bash
+  #       # working-directory: "./wealsoft_techblog"
+  #       run: |
+  #         gsutil -m cp -r ./dist-${{ github.sha }}.tar.gz gs://wealsoft-techblog-test1/ci_artifacts/
