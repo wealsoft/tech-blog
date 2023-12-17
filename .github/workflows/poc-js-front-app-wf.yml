@@ -34,6 +34,23 @@ jobs:
       #     path: './pipeline-making'
       #     ref: "feature/ozaki_poc"
 
+      - name: SetEnv
+        env:
+          PR_BRANCH_NAME: ${{ github.head_ref }}
+        shell: bash
+        run: |
+          echo build_tag=${PR_BRANCH_NAME#*/} >> $GITHUB_ENV
+
+      - name: SetConfigEnv
+        uses: mikefarah/yq@master
+        with:
+          cmd: |
+            CONFIG_COMMON_LIST=$(yq '.common' ./.github/config.yml | sed 's/\:\ /\=/')
+            for config_common in $CONFIG_COMMON_LIST
+            do
+              echo "$config_common" >> $GITHUB_ENV
+            done
+
       - name: Cache
         uses: actions/cache@v3.0.11
         with:

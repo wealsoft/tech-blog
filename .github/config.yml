@@ -1,0 +1,3 @@
+common:
+  machine_user_name: cicd_user
+  machine_user_email: cicd_user@wealsoft.co.jp
