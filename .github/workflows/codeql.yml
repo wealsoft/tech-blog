@@ -13,11 +13,11 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "main", "release/TECHBLOG-****" ]
+    branches: [ "main", "feature/**" ]
   pull_request:
-    branches: [ "main", "release/TECHBLOG-****" ]
+    branches: [ "main" ]
   schedule:
-    - cron: '41 18 * * 3'
+    - cron: '00 00 * * 3'
 
 jobs:
   analyze:
